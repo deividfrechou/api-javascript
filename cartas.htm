@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sortear Carta</title>
+</head>
+<body>
+
+  <h2>🎴 Sorteador de Cartas</h2>
+
+  <button onclick="comprarCarta()">Comprar Carta</button>
+
+  <div id="resultado"></div>
+
+  <script>
+    let deckId = "";
+
+    // Criar e embaralhar baralho
+    fetch("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1")
+      .then(res => res.json())
+      .then(dados => {
+        deckId = dados.deck_id;
+      });
+
+    function comprarCarta() {
+      fetch(`https://deckofcardsapi.com/api/deck/${deckId}/draw/?count=1`)
+        .then(res => res.json())
+        .then(dados => {
+
+          let carta = dados.cards[0];
+
+          document.getElementById("resultado").innerHTML = `
+            <h3>${carta.value} de ${carta.suit}</h3>
+            <img src="${carta.image}" width="150">
+          `;
+        });
+    }
+  </script>
+
+</body>
+</html>

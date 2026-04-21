@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Pokédex</title>
+</head>
+<body>
+
+  <h2>📘 Pokédex</h2>
+
+  <!-- Campo de busca -->
+  <input type="text" id="busca" placeholder="Digite o nome do Pokémon">
+  <button onclick="buscarPokemon()">Buscar</button>
+
+  <br><br>
+
+  <!-- Botões de navegação -->
+  <button onclick="voltar()">⬅️</button>
+  <button onclick="avancar()">➡️</button>
+
+  <div id="resultado"></div>
+
+  <script>
+    // Variável que guarda o número do Pokémon atual
+    let idAtual = 1;
+
+    // Tradução dos tipos para português
+    const tiposPT = {
+      grass: "Planta",
+      fire: "Fogo",
+      water: "Água",
+      electric: "Elétrico",
+      bug: "Inseto",
+      normal: "Normal",
+      poison: "Veneno",
+      ground: "Terra",
+      fairy: "Fada",
+      fighting: "Lutador",
+      psychic: "Psíquico",
+      rock: "Pedra",
+      ghost: "Fantasma",
+      ice: "Gelo",
+      dragon: "Dragão"
+    };
+
+    // Função principal para buscar Pokémon
+    function carregarPokemon(nomeOuId) {
+      fetch(`https://pokeapi.co/api/v2/pokemon/${nomeOuId}`)
+        .then(res => res.json())
+        .then(dados => {
+
+          // Atualiza o ID atual
+          idAtual = dados.id;
+
+          // Nome do Pokémon
+          let nome = dados.name;
+
+          // Imagem
+          let imagem = dados.sprites.front_default;
+
+          // Tipos traduzidos
+          let tipos = dados.types.map(t => tiposPT[t.type.name] || t.type.name);
+
+          // Exibe na tela
+          document.getElementById("resultado").innerHTML = `
+            <h3>${nome.toUpperCase()}</h3>
+            <img src="${imagem}">
+            <p>Tipo: ${tipos.join(", ")}</p>
+            <p>Nº: ${idAtual}</p>
+          `;
+        })
+        .catch(() => {
+          document.getElementById("resultado").innerHTML = "Pokémon não encontrado";
+        });
+    }
+
+    // Botão avançar
+    function avancar() {
+      idAtual++;
+      carregarPokemon(idAtual);
+    }
+
+    // Botão voltar
+    function voltar() {
+      if (idAtual > 1) {
+        idAtual--;
+        carregarPokemon(idAtual);
+      }
+    }
+
+    // Buscar pelo nome
+    function buscarPokemon() {
+      let nome = document.getElementById("busca").value.toLowerCase();
+      carregarPokemon(nome);
+    }
+
+    // Carrega o primeiro Pokémon ao abrir
+    carregarPokemon(idAtual);
+  </script>
+
+</body>
+</html>

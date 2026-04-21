@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Buscar País</title>
+</head>
+<body>
+
+  <h2>Buscar País 🌎</h2>
+
+  <input type="text" id="pais" placeholder="Digite um país (ex: brazil)">
+  <button onclick="buscarPais()">Buscar</button>
+
+  <div id="resultado"></div>
+
+  <script>
+    function buscarPais() {
+      let pais = document.getElementById("pais").value;
+
+      fetch(`https://restcountries.com/v3.1/name/${pais}`)
+        .then(response => response.json())
+        .then(dados => {
+
+          let info = dados[0];
+
+          document.getElementById("resultado").innerHTML = `
+            <h3>${info.name.common}</h3>
+            <img src="${info.flags.png}" width="150">
+            <p>Capital: ${info.capital}</p>
+            <p>Região: ${info.region}</p>
+          `;
+        })
+        .catch(() => {
+          document.getElementById("resultado").innerHTML = "País não encontrado";
+        });
+    }
+  </script>
+
+</body>
+</html>

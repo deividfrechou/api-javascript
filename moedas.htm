@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Conversor de Moedas</title>
+</head>
+<body>
+
+  <h2>Conversor de Moedas 💰</h2>
+
+  <input type="number" id="valor" placeholder="Valor em reais">
+  <button onclick="converter()">Converter para Dólar</button>
+
+  <p id="resultado"></p>
+
+  <script>
+    function converter() {
+      let valor = document.getElementById("valor").value;
+
+      fetch("https://api.exchangerate-api.com/v4/latest/BRL")
+        .then(response => response.json())
+        .then(dados => {
+          let taxa = dados.rates.USD;
+          let convertido = valor * taxa;
+
+          document.getElementById("resultado").innerText =
+            "Valor em dólar: $" + convertido.toFixed(2);
+        })
+        .catch(() => {
+          document.getElementById("resultado").innerText = "Erro na conversão";
+        });
+    }
+  </script>
+
+</body>
+</html>

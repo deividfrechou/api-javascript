@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Buscar Personagem DBZ</title>
+</head>
+<body>
+
+  <h2>🐉 Buscar Personagem Dragon Ball</h2>
+
+  <input type="text" id="nome" placeholder="Digite um personagem">
+  <button onclick="buscar()">Buscar</button>
+
+  <div id="resultado"></div>
+
+  <script>
+    function buscar() {
+      let nome = document.getElementById("nome").value;
+
+      fetch(`https://dragonball-api.com/api/characters?name=${nome}`)
+        .then(res => res.json())
+        .then(dados => {
+
+          let personagem = dados[0];
+
+          document.getElementById("resultado").innerHTML = `
+            <h3>${personagem.name}</h3>
+            <img src="${personagem.image}" width="200">
+            <p>Raça: ${personagem.race}</p>
+          `;
+        })
+        .catch(() => {
+          document.getElementById("resultado").innerHTML =
+            "Personagem não encontrado";
+        });
+    }
+  </script>
+
+</body>
+</html>

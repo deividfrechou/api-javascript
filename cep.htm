@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscando cep</title>
+</head>
+<body>
+    <h2>Busca CEP</h2>
+    <input type="text" id="campocep">
+    <button onclick="buscacep()">Buscar</button>
+    <br><br>
+    <div id="resultado"></div>
+    <script>
+        function buscacep(){
+            let cepdigitado = document.getElementById("campocep").value;
+
+            cepdigitado = cepdigitado.replace(/\D/g,"");
+
+            mostrarmensagem("Buscando...");
+
+            if (cepdigitado.length !== 8){
+                mostrarmensagem("você precisa digitar 8 numeros");
+                return;
+            }
+
+            fetch(`https://viacep.com.br/ws/${cepdigitado}/json/`)
+            .then(res => res.json())
+            .then(dados => {
+                if (dados.erro){
+                    mostrarmensagem("Cep não encontrado");
+                    return;
+                }
+
+             document.getElementById("resultado").innerHTML =
+            "Rua: " + dados.logradouro+"<br>"+
+            "Cidade: " + dados.localidade;
+
+             })
+             .catch(() =>{
+                mostrarmensagem("Erro ao buscar cep, verifique sua conexão")
+             })
+    
+        }
+
+        function mostrarmensagem(texto){
+            document.getElementById("resultado").innerHTML = texto;
+        }
+    </script>
+</body>
+</html>
